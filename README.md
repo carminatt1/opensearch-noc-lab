@@ -12,7 +12,21 @@ Uma prova de conceito (PoC) de um pipeline de dados fim-a-fim utilizando **OpenS
 6. **Alertas Dinâmicos via Telegram:** Microserviço em Python que processa Webhooks do OpenSearch e notifica os operadores do NOC imediatamente no celular.
 7. **Index State Management (ISM):** Políticas de ciclo de vida ativas (`Hot → Warm → Delete`).
 
-## Como rodar o projeto
+## 🚦 Como Ligar e Desligar o Laboratório
+
+Para sua comodidade, criei dois scripts mágicos que cuidam de subir os serviços do Docker e ativar os scripts Python em background na ordem correta.
+
+**Para ligar tudo:**
+```bash
+./start_lab.sh
+```
+
+**Para desligar tudo (antes de fechar o PC):**
+```bash
+./stop_lab.sh
+```
+
+## Como instalar do zero (Primeira Vez)
 
 1. Renomeie `.env.example` para `.env` e adicione seus tokens do Telegram.
 2. Suba a infraestrutura:
