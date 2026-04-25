@@ -12,7 +12,7 @@ objects.append({
     "id": "telecom-noc-pattern",
     "type": "index-pattern",
     "attributes": {
-        "title": "telecom-noc-*",
+        "title": "telecom-noc*",
         "timeFieldName": "timestamp"
     },
     "references": []
@@ -263,12 +263,34 @@ objects.append(make_vis(
     {"mapType":"Scaled Circle Markers","isDesaturated":True,"addTooltip":True,"colorSchema":"Yellow to Red","metricColorMode":"None","colorsRange":[{"from":0,"to":10000}],"mapZoom":4,"mapCenter":[-15.0,-55.0]}
 ))
 
-# 14. Dashboard
+# 14. ML Forecasting (Line com Split Series)
+objects.append(make_vis(
+    "vis-forecasting",
+    "🔮 ML Forecasting: Projeção de Utilização (+15 min)",
+    "Tendência futura calculada via Machine Learning (Regressão Linear)",
+    "line",
+    [
+        {"id":"1","enabled":True,"type":"avg","schema":"metric","params":{"field":"utilization_pct","customLabel":"Utilização Média"}},
+        {"id":"2","enabled":True,"type":"date_histogram","schema":"segment","params":{
+            "field":"timestamp","useNormalizedOpenSearchInterval":True,"interval":"1m","drop_partials":False,"min_doc_count":0,"extended_bounds":{}}},
+        {"id":"3","enabled":True,"type":"terms","schema":"group","params":{
+            "field":"_index","orderBy":"1","order":"desc","size":5,"otherBucket":False,"missingBucket":False,"customLabel":"Origem dos Dados"}}
+    ],
+    {"type":"line","grid":{"categoryLines":False},
+     "categoryAxes":[{"id":"CategoryAxis-1","type":"category","position":"bottom","show":True,"style":{},"scale":{"type":"linear"},"labels":{"show":True,"filter":True,"truncate":100},"title":{}}],
+     "valueAxes":[{"id":"ValueAxis-1","name":"LeftAxis-1","type":"value","position":"left","show":True,"style":{},"scale":{"type":"linear","mode":"normal","setYExtents":True,"defaultYExtents":False,"min":0,"max":100},"labels":{"show":True,"rotate":0,"filter":False,"truncate":100},"title":{"text":"Utilização (%)"}}],
+     "seriesParams":[{"show":True,"type":"line","mode":"normal","data":{"label":"Utilização Média","id":"1"},"valueAxis":"ValueAxis-1","drawLinesBetweenPoints":True,"lineWidth":2,"showCircles":False,"interpolate":"cardinal"}],
+     "addTooltip":True,"addLegend":True,"legendPosition":"right","times":[],"addTimeMarker":True,
+     "thresholdLine":{"show":True,"value":85,"width":2,"style":"dashed","color":"#E7664C"},
+     "labels":{},"orderBucketsBySum":False}
+))
+
+# 15. Dashboard
 panel_refs = []
 panel_defs = []
 vis_ids = [
     "vis-volume-ingestao", "vis-taxa-erros", "vis-utilizacao-media", "vis-latencia-media",
-    "vis-tendencia-utilizacao", "vis-timeline-severidade", "vis-heatmap-host",
+    "vis-tendencia-utilizacao", "vis-forecasting", "vis-timeline-severidade", "vis-heatmap-host",
     "vis-top-hosts-erro", "vis-distribuicao-latencia", "vis-tendencia-latencia", "vis-regiao-distribuicao", "vis-mapa-calor"
 ]
 # Layout grid
@@ -277,7 +299,8 @@ layouts = [
     {"x":12,"y":0,"w":12,"h":8},  # erros
     {"x":24,"y":0,"w":12,"h":8},  # util media
     {"x":36,"y":0,"w":12,"h":8},  # latencia
-    {"x":0,"y":8,"w":48,"h":14},  # tendencia util
+    {"x":0,"y":8,"w":24,"h":14},  # tendencia util
+    {"x":24,"y":8,"w":24,"h":14}, # forecasting (NEW)
     {"x":0,"y":22,"w":24,"h":14}, # timeline sev
     {"x":24,"y":22,"w":24,"h":14},# heatmap
     {"x":0,"y":36,"w":48,"h":12}, # top hosts
