@@ -249,13 +249,27 @@ objects.append(make_vis(
      "labels":{"show":True,"values":True,"last_level":True,"truncate":100}}
 ))
 
-# 13. Dashboard
+# 13. Mapa Geográfico (Coordinate Map)
+objects.append(make_vis(
+    "vis-mapa-calor",
+    "🗺️ Mapa de Incidentes",
+    "Mapa geográfico mostrando o volume de incidentes por região no Brasil",
+    "tile_map",
+    [
+        {"id":"1","enabled":True,"type":"count","schema":"metric","params":{"customLabel":"Eventos"}},
+        {"id":"2","enabled":True,"type":"geohash_grid","schema":"segment","params":{
+            "field":"location","autoPrecision":True,"precision":2,"useGeocentroid":True,"isFilteredByCollar":True,"customLabel":"Localização"}}
+    ],
+    {"mapType":"Scaled Circle Markers","isDesaturated":True,"addTooltip":True,"colorSchema":"Yellow to Red","metricColorMode":"None","colorsRange":[{"from":0,"to":10000}],"mapZoom":4,"mapCenter":[-15.0,-55.0]}
+))
+
+# 14. Dashboard
 panel_refs = []
 panel_defs = []
 vis_ids = [
     "vis-volume-ingestao", "vis-taxa-erros", "vis-utilizacao-media", "vis-latencia-media",
     "vis-tendencia-utilizacao", "vis-timeline-severidade", "vis-heatmap-host",
-    "vis-top-hosts-erro", "vis-distribuicao-latencia", "vis-tendencia-latencia", "vis-regiao-distribuicao"
+    "vis-top-hosts-erro", "vis-distribuicao-latencia", "vis-tendencia-latencia", "vis-regiao-distribuicao", "vis-mapa-calor"
 ]
 # Layout grid
 layouts = [
@@ -270,6 +284,7 @@ layouts = [
     {"x":0,"y":48,"w":24,"h":14}, # dist latencia
     {"x":24,"y":48,"w":24,"h":14},# latencia vs loss
     {"x":0,"y":62,"w":24,"h":14}, # regiao
+    {"x":24,"y":62,"w":24,"h":14},# mapa de calor
 ]
 
 for i, (vid, layout) in enumerate(zip(vis_ids, layouts)):

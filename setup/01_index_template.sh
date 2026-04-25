@@ -52,6 +52,9 @@ curl -sf -X PUT "${OPENSEARCH_URL}/_index_template/telecom-noc-template" \
           "type": "keyword",
           "doc_values": true
         },
+        "location": {
+          "type": "geo_point"
+        },
         "severity": {
           "type": "keyword",
           "doc_values": true

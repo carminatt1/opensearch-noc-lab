@@ -49,6 +49,14 @@ logger = logging.getLogger("noc-generator")
 HOSTNAMES = [f"BR-SP-CORE-{i}" for i in range(100, 106)]
 INTERFACES = ["GigabitEthernet0/0", "GigabitEthernet0/1", "TenGigE1/0", "TenGigE1/1", "Loopback0"]
 REGIONS = ["SP-Capital", "SP-Interior", "RJ-Capital", "MG-Capital", "PR-Capital", "RS-Capital"]
+GEO_COORDS = {
+    "SP-Capital": "-23.5505,-46.6333",
+    "SP-Interior": "-22.9099,-47.0626",
+    "RJ-Capital": "-22.9068,-43.1729",
+    "MG-Capital": "-19.9208,-43.9378",
+    "PR-Capital": "-25.4284,-49.2733",
+    "RS-Capital": "-30.0346,-51.2177"
+}
 SEVERITIES_NORMAL = ["INFO", "WARNING"]
 MESSAGES_NORMAL = [
     "Normal traffic",
@@ -93,12 +101,15 @@ class NOCEventGenerator:
 
         # Timestamp timezone-aware (UTC) — sem DeprecationWarning
         timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+        
+        region = random.choice(REGIONS)
 
         return {
             "timestamp": timestamp,
             "hostname": random.choice(HOSTNAMES),
             "interface": random.choice(INTERFACES),
-            "region": random.choice(REGIONS),
+            "region": region,
+            "location": GEO_COORDS[region],
             "severity": severity,
             "message": message,
             "utilization_pct": utilization,
