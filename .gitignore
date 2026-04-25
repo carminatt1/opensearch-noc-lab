@@ -1,0 +1,18 @@
+# Virtual Environments
+.venv/
+venv/
+ENV/
+
+# Arquivos de Configuração e Segredos
+.env
+*.env
+secret/
+
+# Logs
+*.log
+generator.log
+
+# Caches do Python
+__pycache__/
+*.pyc
+*.pyo
